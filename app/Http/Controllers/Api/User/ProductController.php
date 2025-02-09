@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\MenuProductsResource;
 use App\Http\Resources\User\ProductResource;
@@ -12,10 +13,17 @@ class ProductController extends Controller
 {
     public function index(): JsonResponse
     {
-        $products = Product::all();
+        $pizzas = Product::query()
+            ->where('type', ProductType::Pizza)
+            ->get();
+
+        $drinks = Product::query()
+            ->where('type', ProductType::Drink)
+            ->get();
 
         return response()->json([
-            'products' => MenuProductsResource::collection($products)
+            'pizzas' => MenuProductsResource::collection($pizzas),
+            'drinks' => MenuProductsResource::collection($drinks)
         ]);
     }
 
