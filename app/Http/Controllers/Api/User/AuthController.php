@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginRequest;
@@ -35,17 +35,17 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = auth()->user()->createToken('sanctum_token');
+        $token = $user->createToken('sanctum_token');
 
         return response()->json([
             'token' => $token->plainTextToken,
-        ], Response::HTTP_OK);
+        ]);
     }
 
-    public function logout(): \Illuminate\Http\Response
+    public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 
-        return response()->noContent(200);
+        return response()->json();
     }
 }

@@ -12,7 +12,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'unique:users', 'regex:/^\+7\d{10}$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'address' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-zА-Яа-яЁё\s-]+,\s*\d+[A-Za-zА-Яа-яЁё]*$/'],
             'password' => ['required', 'confirmed', 'min:8', 'max:255'],
         ];
     }
