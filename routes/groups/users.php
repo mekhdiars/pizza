@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\User\AuthController;
+use App\Http\Controllers\Api\User\CartController;
 use App\Http\Controllers\Api\User\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::as('user.')->group(function () {
     Route::group(
-        ['controller' => AuthController::class, 'prefix' => 'users'],
+        ['controller' => AuthController::class, 'prefix' => '/users'],
         function () {
             Route::post('register', 'register')
                 ->middleware('guest.sanctum')
@@ -22,4 +23,19 @@ Route::as('user.')->group(function () {
 
     Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
+
+    Route::group(
+        ['controller' => CartController::class, 'prefix' => '/cart', 'as' => 'cart.'],
+        function () {
+            Route::put('/', 'replaceUserCart')
+                ->middleware('auth:sanctum')
+                ->name('replace');
+            Route::get('/', 'getProducts')
+                ->name('getProducts');
+            Route::post('/', 'addProduct')
+                ->name('addProduct');
+            Route::delete('/{cartProduct}', 'deleteProduct')
+                ->name('deleteProduct');
+        }
+    );
 });

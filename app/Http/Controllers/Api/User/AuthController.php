@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\LoginRequest;
-use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\Auth\LoginRequest;
+use App\Http\Requests\User\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +46,8 @@ class AuthController extends Controller
     {
         auth()->user()->tokens()->delete();
 
-        return response()->json();
+        return response()->json([
+            'message' => 'Successfully logged out',
+        ]);
     }
 }

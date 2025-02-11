@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ProductType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,7 +15,7 @@ class ProductFactory extends Factory
         return [
             'title' => fake()->unique()->word(),
             'description' => fake()->text,
-            'type' => fake()->randomElement(['pizza', 'drink']),
+            'type' => fake()->randomElement([ProductType::Pizza->value, ProductType::Drink->value]),
             'price' => fake()->randomFloat(2, 1, 100),
         ];
     }
