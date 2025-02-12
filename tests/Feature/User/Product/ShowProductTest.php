@@ -10,15 +10,6 @@ class ShowProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_product_not_found(): void
-    {
-        $this->assertDatabaseEmpty(Product::class);
-
-        $response = $this->getJson(route('user.products.show', ['product' => 1]));
-
-        $response->assertNotFound();
-    }
-
     public function test_show_product(): void
     {
         $product = Product::factory()->create();

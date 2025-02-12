@@ -46,10 +46,9 @@ class ReplaceCartTest extends TestCase
         $cart = [
             'cart_products' => [
                 CartProduct::factory()
-                    ->for(User::factory())
                     ->for(Product::factory())
                     ->make([
-                        'quantity' => LimitProductsInCart::Drink->value + 10
+                        'quantity' => LimitProductsInCart::Drink->value + 1
                     ])
             ]
         ];
@@ -67,15 +66,13 @@ class ReplaceCartTest extends TestCase
         $cart = [
             'cart_products' => [
                 CartProduct::factory()
-                    ->for(User::factory())
                     ->for(Product::factory())
                     ->make()
-            ],
-            [
+                    ->toArray(),
                 CartProduct::factory()
-                    ->for(User::factory())
                     ->for(Product::factory())
                     ->make()
+                    ->toArray(),
             ],
         ];
 
@@ -95,5 +92,8 @@ class ReplaceCartTest extends TestCase
                         'quantity'],
                 ]
             ]);
+
+        $this->assertDatabaseHas('cart_products', $cart['cart_products'][0]);
+        $this->assertDatabaseHas('cart_products', $cart['cart_products'][1]);
     }
 }
