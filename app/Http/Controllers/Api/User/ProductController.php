@@ -14,11 +14,11 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
         $pizzas = Product::query()
-            ->where('type', ProductType::Pizza)
+            ->where('type', 'pizza')
             ->get();
 
         $drinks = Product::query()
-            ->where('type', ProductType::Drink)
+            ->where('type', 'drink')
             ->get();
 
         return response()->json([

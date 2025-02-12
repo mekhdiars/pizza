@@ -15,7 +15,7 @@ class ProductFactory extends Factory
         return [
             'title' => fake()->unique()->word(),
             'description' => fake()->text,
-            'type' => fake()->randomElement([ProductType::Pizza->value, ProductType::Drink->value]),
+            'type' => fake()->randomElement(['pizza', 'drink']),
             'price' => fake()->randomFloat(2, 1, 100),
         ];
     }

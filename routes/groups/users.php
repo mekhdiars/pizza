@@ -25,10 +25,9 @@ Route::as('user.')->group(function () {
         ->only(['index', 'show']);
 
     Route::group(
-        ['controller' => CartController::class, 'prefix' => '/cart', 'as' => 'cart.'],
+        ['controller' => CartController::class, 'prefix' => '/cart', 'as' => 'cart.', 'middleware' => 'auth:sanctum'],
         function () {
             Route::put('/', 'replaceUserCart')
-                ->middleware('auth:sanctum')
                 ->name('replace');
             Route::get('/', 'getProducts')
                 ->name('getProducts');
