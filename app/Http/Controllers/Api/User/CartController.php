@@ -8,6 +8,7 @@ use App\Http\Requests\User\Cart\AddProductRequest;
 use App\Http\Requests\User\Cart\ReplaceCartRequest;
 use App\Http\Resources\User\CartProductsResource;
 use App\Models\CartProduct;
+use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,27 +21,20 @@ class CartController extends Controller
     ) {
     }
 
-    public function replaceUserCart(ReplaceCartRequest $request): JsonResponse
+    public function getProducts(): JsonResponse
     {
-        $cartProducts = $request->cart_products;
         $user = auth('sanctum')->user();
+        $cartProducts = $user->cartProducts;
 
-        try {
-            $this->cartService->replaceUserCart($user, $cartProducts);
-        } catch (\Exception $e) {
-            Log::error('Cart replace failed: ' . $e->getMessage());
+        if (empty($cartProducts->toArray())) {
             return response()->json([
-                'message' => 'Cart replace failed'
-            ], 500);
+                'message' => 'Cart is empty'
+            ]);
         }
 
         return response()->json([
             'cart_products' => CartProductsResource::collection($user->cartProducts),
         ]);
-    }
-
-    public function getProducts()
-    {
     }
 
     public function addProduct(AddProductRequest $request): JsonResponse
@@ -62,8 +56,31 @@ class CartController extends Controller
         ]);
     }
 
-    public function deleteProduct(CartProduct $cartProduct)
+    public function replaceUserCart(ReplaceCartRequest $request): JsonResponse
     {
-        //
+        $cartProducts = $request->cart_products;
+        $user = auth('sanctum')->user();
+
+        try {
+            $this->cartService->replaceUserCart($user, $cartProducts);
+        } catch (\Exception $e) {
+            Log::error('Cart replace failed: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Cart replace failed'
+            ], 500);
+        }
+
+        return response()->json([
+            'cart_products' => CartProductsResource::collection($user->cartProducts),
+        ]);
+    }
+
+    public function deleteProduct(CartProduct $cartProduct): JsonResponse
+    {
+        $cartProduct->delete();
+
+        return response()->json([
+            'message' => 'Product deleted from cart',
+        ]);
     }
 }

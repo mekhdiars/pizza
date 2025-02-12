@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\GuestSanctum;
+use App\Http\Middleware\User\CartProductAccessMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'guest.sanctum' => GuestSanctum::class,
+            'cartProductAccess' => CartProductAccessMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -12,7 +12,7 @@ class CartProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'quantity' => fake()->numberBetween(1, 10)
+            'quantity' => fake()->numberBetween(1, 5)
         ];
     }
 }

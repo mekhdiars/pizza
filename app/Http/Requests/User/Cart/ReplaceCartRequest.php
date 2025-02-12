@@ -35,16 +35,13 @@ class ReplaceCartRequest extends FormRequest
                 $productsCount = (new ProductService())
                     ->getCountProductsByType($this->cart_products);
 
-                if ($productsCount['pizza'] > LimitProductsInCart::Pizza->value) {
+                if ($productsCount['pizza'] > LimitProductsInCart::Pizza->value
+                    || $productsCount['drink'] > LimitProductsInCart::Drink->value) {
                     $validator->errors()->add(
                         'cart_products',
-                        'The limit of pizzas in the basket has been exceeded (maximum {LimitOnProductsInCart::Pizza->value})'
-                    );
-                }
-                if ($productsCount['drink'] > LimitProductsInCart::Drink->value) {
-                    $validator->errors()->add(
-                        'cart_products',
-                        "The limit of drinks in the basket has been exceeded (maximum {LimitOnProductsInCart::Drink->value})"
+                        "Exceeding limit cart products: "
+                        . LimitProductsInCart::Pizza->value . " pizzas and "
+                        . LimitProductsInCart::Drink->value . " drinks"
                     );
                 }
             }

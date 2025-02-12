@@ -85,7 +85,6 @@ class ReplaceCartTest extends TestCase
                         'product' => [
                             'id',
                             'title',
-                            'description',
                             'type',
                             'price'
                         ],
