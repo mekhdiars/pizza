@@ -58,11 +58,42 @@ class GetCartProductsTest extends TestCase
                             'id',
                             'title',
                             'type',
-                            'price'
                         ],
-                        'quantity'
+                        'quantity',
+                        'price'
                     ],
                 ]
+            ]);
+    }
+
+    public function test_correct_total_price(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $pizza = Product::factory()->create(['type' => 'pizza']);
+        $drink = Product::factory()->create(['type' => 'drink']);
+        $cart = $user->cartProducts()->createMany([
+            [
+                'product_id' => $pizza->id,
+                'quantity' => 10
+            ],
+            [
+                'product_id' => $drink->id,
+                'quantity' => 5
+            ]
+        ]);
+
+        $response = $this->getJson(route('user.cart.getProducts'));
+
+        $totalPrice = $cart->reduce(function ($total, $cartProduct) {
+            $productId = $cartProduct['product_id'];
+            return $total + (Product::query()->find($productId)->price * $cartProduct['quantity']);
+        }, 0);
+
+        $response
+            ->assertOk()
+            ->assertJson([
+                'total_price' => round($totalPrice, 2)
             ]);
     }
 }

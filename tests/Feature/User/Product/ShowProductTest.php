@@ -19,13 +19,11 @@ class ShowProductTest extends TestCase
         $response
             ->assertOk()
             ->assertJson([
-                'data' => [
-                    'id' => $product->id,
-                    'title' => $product->title,
-                    'description' => $product->description,
-                    'type' => $product->type,
-                    'price' => $product->price
-                ]
+                'id' => $product->id,
+                'title' => $product->title,
+                'description' => $product->description,
+                'type' => $product->type,
+                'price' => $product->price
             ]);
     }
 }

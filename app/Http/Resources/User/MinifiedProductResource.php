@@ -13,7 +13,6 @@ class MinifiedProductResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'type' => $this->type,
-            'price' => $this->price
         ];
     }
 }

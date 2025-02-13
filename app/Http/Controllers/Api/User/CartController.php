@@ -6,12 +6,10 @@ use App\Exceptions\ExceedingLimitCartProductsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Cart\AddProductRequest;
 use App\Http\Requests\User\Cart\ReplaceCartRequest;
-use App\Http\Resources\User\CartProductsResource;
+use App\Http\Resources\User\CartResource;
 use App\Models\CartProduct;
-use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
@@ -21,7 +19,7 @@ class CartController extends Controller
     ) {
     }
 
-    public function getProducts(): JsonResponse
+    public function getCart(): JsonResponse
     {
         $user = auth('sanctum')->user();
         $cartProducts = $user->cartProducts;
@@ -32,9 +30,9 @@ class CartController extends Controller
             ]);
         }
 
-        return response()->json([
-            'cart_products' => CartProductsResource::collection($user->cartProducts),
-        ]);
+        return response()->json(
+            new CartResource($user->cartProducts)
+        );
     }
 
     public function addProduct(AddProductRequest $request): JsonResponse
@@ -70,9 +68,9 @@ class CartController extends Controller
             ], 500);
         }
 
-        return response()->json([
-            'cart_products' => CartProductsResource::collection($user->cartProducts),
-        ]);
+        return response()->json(
+            new CartResource($user->cartProducts)
+        );
     }
 
     public function deleteProduct(CartProduct $cartProduct): JsonResponse

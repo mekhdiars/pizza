@@ -61,7 +61,8 @@ class ReplaceCartTest extends TestCase
 
     public function test_replace_cart_success(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $cart = [
             'cart_products' => [
@@ -86,9 +87,10 @@ class ReplaceCartTest extends TestCase
                             'id',
                             'title',
                             'type',
-                            'price'
                         ],
-                        'quantity'],
+                        'quantity',
+                        'price',
+                    ],
                 ]
             ]);
 

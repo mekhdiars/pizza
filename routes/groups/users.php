@@ -27,7 +27,7 @@ Route::as('user.')->group(function () {
     Route::group(
         ['controller' => CartController::class, 'prefix' => '/cart', 'as' => 'cart.', 'middleware' => 'auth:sanctum'],
         function () {
-            Route::get('/', 'getProducts')
+            Route::get('/', 'getCart')
                 ->name('getProducts');
             Route::post('/', 'addProduct')
                 ->name('addProduct');

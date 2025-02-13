@@ -27,8 +27,10 @@ class ProductController extends Controller
         ]);
     }
 
-    public function show(Product $product): ProductResource
+    public function show(Product $product): JsonResponse
     {
-        return new ProductResource($product);
+        return response()->json(
+            new ProductResource($product)
+        );
     }
 }
