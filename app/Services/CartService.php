@@ -3,19 +3,15 @@
 namespace App\Services;
 
 use App\Enums\LimitProductsInCart;
-use App\Enums\ProductType;
 use App\Models\CartProduct;
 use App\Models\Product;
 use App\Models\User;
 
 class CartService
 {
-    public function replaceUserCart(User $user, array $cartProducts): void
-    {
-        \DB::transaction(function () use ($user, $cartProducts) {
-            $user->cartProducts()->delete();
-            $user->cartProducts()->createMany($cartProducts);
-        });
+    public function __construct(
+        private readonly ProductService $productService
+    ) {
     }
 
     public function addProduct(User $user, int $productId, int $quantity): CartProduct
@@ -25,11 +21,8 @@ class CartService
             ->first();
 
         if ($cartProduct) {
-            $cartProduct->update([
-                'quantity' => $cartProduct->quantity + $quantity
-            ]);
-
-            return $cartProduct;
+            $cartProduct->increment('quantity', $quantity);
+            return $cartProduct->fresh();
         }
 
         return $user->cartProducts()->create([
@@ -38,7 +31,19 @@ class CartService
         ]);
     }
 
-    public function canAddProduct(User $user, int $productId, $quantity): bool
+
+    /**
+     * @param array<array{product_id: int, quantity: int}> $cartProducts
+     */
+    public function replaceUserCart(User $user, array $cartProducts): void
+    {
+        \DB::transaction(function () use ($user, $cartProducts) {
+            $user->cartProducts()->delete();
+            $user->cartProducts()->createMany($cartProducts);
+        });
+    }
+
+    public function canAddProduct(User $user, int $productId, int $quantity): bool
     {
         $type = Product::query()->find($productId)->type;
         $productsCount = $user->cartProducts()
@@ -54,10 +59,13 @@ class CartService
             : $total <= LimitProductsInCart::Drink->value;
     }
 
-    public function howManyProductsCanAdd($user): array
+    /**
+     * @return array{pizza: int, drink: int}
+     */
+    public function howManyProductsCanAdd(User $user): array
     {
         $products = $user->cartProducts()->get();
-        $productsCount = (new ProductService())
+        $productsCount = $this->productService
             ->getCountProductsByType($products->toArray());
 
         return [

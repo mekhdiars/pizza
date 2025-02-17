@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\MenuProductsResource;
-use App\Http\Resources\User\ProductResource;
+use App\Http\Resources\User\Product\MenuProductsResource;
+use App\Http\Resources\User\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartProduct extends Model
 {
+    /** @use HasFactory<\Database\Factories\CartProductFactory> */
     use HasFactory;
 
     protected $fillable = [

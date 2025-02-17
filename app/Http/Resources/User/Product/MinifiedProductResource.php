@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources\User\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MenuProductsResource extends JsonResource
+class MinifiedProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -13,7 +13,6 @@ class MenuProductsResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'type' => $this->type,
-            'price' => $this->price
         ];
     }
 }

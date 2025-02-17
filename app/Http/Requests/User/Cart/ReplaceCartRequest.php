@@ -6,6 +6,7 @@ use App\Enums\LimitProductsInCart;
 use App\Enums\ProductType;
 use App\Services\ProductService;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class ReplaceCartRequest extends FormRequest
@@ -19,7 +20,10 @@ class ReplaceCartRequest extends FormRequest
     {
         return [
             'cart_products' => ['required', 'array'],
-            'cart_products.*.product_id' => ['required', 'exists:products,id'],
+            'cart_products.*.product_id' => [
+                'required',
+                Rule::exists('products', 'id')->whereNull('deleted_at'),
+            ],
             'cart_products.*.quantity' => ['required', 'integer', 'min:1'],
         ];
     }

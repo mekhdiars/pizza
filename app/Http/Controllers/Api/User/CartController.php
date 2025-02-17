@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Exceptions\ExceedingLimitCartProductsException;
+use App\Exceptions\CartLimitException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Cart\AddProductRequest;
 use App\Http\Requests\User\Cart\ReplaceCartRequest;
-use App\Http\Resources\User\CartResource;
+use App\Http\Resources\User\Cart\CartResource;
 use App\Models\CartProduct;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +24,7 @@ class CartController extends Controller
         $user = auth('sanctum')->user();
         $cartProducts = $user->cartProducts;
 
-        if (empty($cartProducts->toArray())) {
+        if ($cartProducts->isEmpty()) {
             return response()->json([
                 'message' => 'Cart is empty'
             ]);
@@ -44,7 +44,7 @@ class CartController extends Controller
         if ($canAdd === false) {
             $productsCountCanAdd = $this->cartService->howManyProductsCanAdd($user);
             $message = "You can add {$productsCountCanAdd['pizza']} pizzas and {$productsCountCanAdd['drink']} drinks";
-            throw new ExceedingLimitCartProductsException($message);
+            throw new CartLimitException($message);
         }
 
         $this->cartService->addProduct($user, $request->product_id, $request->quantity);

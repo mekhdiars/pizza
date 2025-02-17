@@ -6,7 +6,7 @@ use App\Enums\LimitProductsInCart;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class ExceedingLimitCartProductsException extends HttpException
+class CartLimitException extends HttpException
 {
     protected $message = "Exceeding limit cart products: "
         . LimitProductsInCart::Pizza->value . " pizzas and "

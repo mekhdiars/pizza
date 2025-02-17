@@ -6,8 +6,7 @@ use App\Http\Controllers\Api\User\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::as('user.')->group(function () {
-    Route::group(
-        ['controller' => AuthController::class, 'prefix' => '/users'],
+    Route::controller(AuthController::class)->group(
         function () {
             Route::post('/register', 'register')
                 ->middleware('guest.sanctum')

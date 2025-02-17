@@ -6,6 +6,10 @@ use App\Models\Product;
 
 class ProductService
 {
+    /**
+     * @param array<array{product_id: int, quantity: int}> $products
+     * @return array{pizza: int, drink: int}
+     */
     public function getCountProductsByType(array $products): array
     {
         $productIds = collect($products)
