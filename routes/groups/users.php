@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\User\AuthController;
 use App\Http\Controllers\Api\User\CartController;
+use App\Http\Controllers\Api\User\OrderController;
 use App\Http\Controllers\Api\User\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,9 @@ Route::as('user.')->group(function () {
                 ->name('deleteProduct');
         }
     );
+
+    Route::apiResource('/orders', OrderController::class)
+        ->except(['update', 'destroy'])
+        ->middleware('auth:sanctum')
+        ->middlewareFor('store', 'cartNotEmpty');
 });

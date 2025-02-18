@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\User\Cart;
 
+use App\Models\CartProduct;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -85,15 +86,14 @@ class GetCartProductsTest extends TestCase
 
         $response = $this->getJson(route('user.cart.getProducts'));
 
-        $totalPrice = $cart->reduce(function ($total, $cartProduct) {
-            $productId = $cartProduct['product_id'];
-            return $total + (Product::query()->find($productId)->price * $cartProduct['quantity']);
-        }, 0);
+        $total = $user->cartProducts->sum(function (CartProduct $cartProduct) {
+            return $cartProduct->product->price * $cartProduct->quantity;
+        });
 
         $response
             ->assertOk()
             ->assertJson([
-                'total_price' => round($totalPrice, 2)
+                'total_price' => round($total, 2)
             ]);
     }
 }

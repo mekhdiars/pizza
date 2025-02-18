@@ -4,7 +4,7 @@ namespace App\Http\Requests\User\Cart;
 
 use App\Enums\LimitProductsInCart;
 use App\Enums\ProductType;
-use App\Services\ProductService;
+use App\Services\User\ProductService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;

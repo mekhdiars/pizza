@@ -8,7 +8,7 @@ use App\Http\Requests\User\Cart\AddProductRequest;
 use App\Http\Requests\User\Cart\ReplaceCartRequest;
 use App\Http\Resources\User\Cart\CartResource;
 use App\Models\CartProduct;
-use App\Services\CartService;
+use App\Services\User\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 

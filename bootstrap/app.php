@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureCartNotEmptyMiddleware;
 use App\Http\Middleware\GuestSanctum;
 use App\Http\Middleware\User\CartProductAccessMiddleware;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'guest.sanctum' => GuestSanctum::class,
             'cartProductAccess' => CartProductAccessMiddleware::class,
+            'cartNotEmpty' => EnsureCartNotEmptyMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

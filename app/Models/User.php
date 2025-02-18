@@ -40,4 +40,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(CartProduct::class)->with('product');
     }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class)->with('products');
+    }
+
+    public function calculateCartTotal(): float
+    {
+        $total = $this->cartProducts->sum(function (CartProduct $cartProduct) {
+            return $cartProduct->product->price * $cartProduct->quantity;
+        });
+
+        return round($total, 2);
+    }
 }
