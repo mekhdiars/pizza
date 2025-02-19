@@ -39,8 +39,19 @@ Route::as('user.')->group(function () {
         }
     );
 
-    Route::apiResource('/orders', OrderController::class)
-        ->except(['update', 'destroy'])
-        ->middleware('auth:sanctum')
-        ->middlewareFor('store', 'cartNotEmpty');
+    Route::group(
+        [
+            'controller' => OrderController::class,
+            'prefix' => '/orders',
+            'as' => 'orders.',
+            'middleware' => 'auth:sanctum'
+        ],
+        function () {
+            Route::apiResource('/', OrderController::class)
+                ->only(['index', 'store'])
+                ->middlewareFor('store', 'cartNotEmpty');
+            Route::get('/active', 'getActiveOrders')
+                ->name('active');
+        }
+    );
 });

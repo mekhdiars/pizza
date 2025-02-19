@@ -28,7 +28,7 @@ class PlaceOrderTest extends TestCase
     {
         $data = [
             'delivery_address' => $this->user->address,
-            'delivery_time' => '20:00'
+            'delivery_time' => now()->toTimeString('minute'),
         ];
 
         $response = $this->postJson(route('user.orders.store'), $data);
@@ -45,10 +45,9 @@ class PlaceOrderTest extends TestCase
             ['product_id' => $drink->id, 'quantity' => 2]
         ]);
 
-        $deliveryTime = now()->setTime(20, 0);
         $data = [
             'delivery_address' => $this->user->address,
-            'delivery_time' => $deliveryTime->toTimeString('minute'),
+            'delivery_time' => now()->toTimeString('minute'),
         ];
 
         $response = $this->postJson(route('user.orders.store'), $data);
@@ -57,7 +56,7 @@ class PlaceOrderTest extends TestCase
 
         $this->assertDatabaseHas(Order::class, [
             'user_id' => $this->user->id,
-            'amount' => $this->user->calculateCartTotal(),
+            'amount' => $this->user->getCartTotal(),
             'status' => OrderStatus::Preparing->value,
             'delivery_address' => $data['delivery_address'],
             'delivery_time' => $data['delivery_time'],

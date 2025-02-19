@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Order\StoreOrderRequest;
-use App\Models\Order;
+use App\Http\Resources\User\Order\OrderCollection;
 use App\Services\User\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -41,8 +41,19 @@ class OrderController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function show(Order $order)
+    public function getActiveOrders(): JsonResponse
     {
-        //
+        $user = auth('sanctum')->user();
+        $activeOrders = $user->orders()->active()->get();
+
+        if ($activeOrders->isEmpty()) {
+            return response()->json([
+                'message' => 'No active orders found'
+            ]);
+        }
+
+        return response()->json(
+            new OrderCollection($activeOrders)
+        );
     }
 }
