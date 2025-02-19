@@ -12,7 +12,7 @@ class OrderService
         \DB::transaction(function () use ($user, $data) {
             $cartProducts = $user->cartProducts;
             $order = $user->orders()->create([
-                'amount' => $user->calculateCartTotal(),
+                'amount' => $user->getCartTotal(),
                 'status' => OrderStatus::Preparing->value,
                 'delivery_address' => $data['delivery_address'],
                 'delivery_time' => $data['delivery_time'],

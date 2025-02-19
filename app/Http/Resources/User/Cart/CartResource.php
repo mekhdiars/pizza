@@ -12,7 +12,7 @@ class CartResource extends JsonResource
     {
         return [
             'cart_products' => new CartProductCollection($this),
-            'total_price' => $request->user()->calculateCartTotal(),
+            'total_price' => $request->user()->getCartTotal(),
         ];
     }
 }
