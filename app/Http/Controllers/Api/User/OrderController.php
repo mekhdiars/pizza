@@ -17,11 +17,6 @@ class OrderController extends Controller
     ) {
     }
 
-    public function index()
-    {
-        //
-    }
-
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $user = $request->user();
@@ -54,6 +49,22 @@ class OrderController extends Controller
 
         return response()->json(
             new OrderCollection($activeOrders)
+        );
+    }
+
+    public function getOrderHistory(): JsonResponse
+    {
+        $user = auth('sanctum')->user();
+        $orders = $user->orders()->history()->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'message' => 'No order history found'
+            ]);
+        }
+
+        return response()->json(
+            new OrderCollection($orders)
         );
     }
 }

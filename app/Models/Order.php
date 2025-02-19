@@ -38,6 +38,13 @@ class Order extends Model
         ]);
     }
 
+    public function scopeHistory(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            OrderStatus::Received->value,
+        ]);
+    }
+
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class)

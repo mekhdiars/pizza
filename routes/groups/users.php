@@ -49,9 +49,11 @@ Route::as('user.')->group(function () {
         function () {
             Route::post('/', 'store')
                 ->middleware('cartNotEmpty')
-                ->name('store');
+                ->name('/store');
             Route::get('/active', 'getActiveOrders')
                 ->name('active');
+            Route::get('/history', 'getOrderHistory')
+                ->name('history');
         }
     );
 });
