@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Middleware\EnsureCartNotEmptyMiddleware;
-use App\Http\Middleware\GuestSanctum;
+use App\Http\Middleware\Admin\CheckIsAdminMiddleware;
+use App\Http\Middleware\User\EnsureCartNotEmptyMiddleware;
 use App\Http\Middleware\User\CartProductAccessMiddleware;
+use App\Http\Middleware\IsGuestMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,12 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware('api')->prefix('api')
-                ->group(base_path('/routes/groups/users.php'));
+                ->group(base_path('/routes/groups/users.php'))
+                ->group(base_path('/routes/groups/admins.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->statefulApi();
         $middleware->alias([
-            'guest.sanctum' => GuestSanctum::class,
+            'isGuest' => IsGuestMiddleware::class,
+            'isAdmin' => CheckIsAdminMiddleware::class,
             'cartProductAccess' => CartProductAccessMiddleware::class,
             'cartNotEmpty' => EnsureCartNotEmptyMiddleware::class
         ]);

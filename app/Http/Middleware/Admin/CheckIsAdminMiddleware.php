@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Admin;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class GuestSanctum
+class CheckIsAdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth('sanctum')->check()) {
+        $user = auth('sanctum')->user();
+        if (!$user->isAdmin()) {
             return response()->json([
-                'message' => 'You are already authenticated.'
+                'message' => 'Access denied'
             ], Response::HTTP_FORBIDDEN);
         }
-
         return $next($request);
     }
 }

@@ -10,10 +10,10 @@ Route::as('user.')->group(function () {
     Route::controller(AuthController::class)->group(
         function () {
             Route::post('/register', 'register')
-                ->middleware('guest.sanctum')
+                ->middleware('isGuest')
                 ->name('register');
             Route::post('/login', 'login')
-                ->middleware('guest.sanctum')
+                ->middleware('isGuest')
                 ->name('login');
             Route::post('/logout', 'logout')
                 ->middleware('auth:sanctum')
@@ -49,7 +49,7 @@ Route::as('user.')->group(function () {
         function () {
             Route::post('/', 'store')
                 ->middleware('cartNotEmpty')
-                ->name('/store');
+                ->name('store');
             Route::get('/active', 'getActiveOrders')
                 ->name('active');
             Route::get('/history', 'getOrderHistory')

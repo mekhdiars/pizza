@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\Auth\LoginRequest;
-use App\Http\Requests\User\Auth\RegisterRequest;
-use App\Models\User;
+use App\Http\Requests\Admin\Auth\LoginRequest;
+use App\Http\Requests\Admin\Auth\RegisterRequest;
+use App\Models\Admin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -15,27 +15,27 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = User::query()
+        $admin = Admin::query()
             ->create($request->validated());
 
         return response()
-            ->json($user, Response::HTTP_CREATED);
+            ->json($admin, Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::query()
+        $admin = Admin::query()
             ->where('email', $request->login)
             ->orWhere('phone_number', $request->login)
             ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
             throw ValidationException::withMessages([
                 'message' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $token = $user->createToken('sanctum_token');
+        $token = $admin->createToken('admin_sanctum_token');
 
         return response()->json([
             'token' => $token->plainTextToken,
@@ -44,7 +44,7 @@ class AuthController extends Controller
 
     public function logout(): JsonResponse
     {
-        auth('sanctum')->user()->tokens()->delete();
+        auth('sanctum')->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Successfully logged out',

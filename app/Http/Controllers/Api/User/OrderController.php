@@ -19,7 +19,7 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request): JsonResponse
     {
-        $user = $request->user();
+        $user = auth('sanctum')->user();
         $data = $request->validated();
 
         try {

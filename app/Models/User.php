@@ -36,6 +36,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function isAdmin(): bool
+    {
+        return false;
+    }
+
     public function cartProducts(): HasMany
     {
         return $this->hasMany(CartProduct::class)->with('product');
