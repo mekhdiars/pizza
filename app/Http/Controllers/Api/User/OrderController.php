@@ -39,7 +39,7 @@ class OrderController extends Controller
     public function getActiveOrders(): JsonResponse
     {
         $user = auth('sanctum')->user();
-        $activeOrders = $user->orders()->active()->get();
+        $activeOrders = $user->orders()->active()->paginate();
 
         if ($activeOrders->isEmpty()) {
             return response()->json([
@@ -55,7 +55,14 @@ class OrderController extends Controller
     public function getOrderHistory(): JsonResponse
     {
         $user = auth('sanctum')->user();
-        $orders = $user->orders()->history()->get();
+        $orders = $user->orders()
+            ->history()
+            ->with([
+                'products' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])
+            ->paginate();
 
         if ($orders->isEmpty()) {
             return response()->json([

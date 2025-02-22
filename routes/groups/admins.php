@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AuthController;
+use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,24 @@ Route::group(
 
         Route::apiResource('/products', ProductController::class)
             ->middleware(['auth:sanctum', 'isAdmin']);
+
+        Route::group(
+            [
+                'controller' => OrderController::class,
+                'prefix' => '/orders',
+                'as' => 'orders.',
+                'middleware' => ['auth:sanctum', 'isAdmin']
+            ],
+            function () {
+                Route::get('/active', 'getActiveOrders')
+                    ->name('active');
+                Route::get('/history', 'getOrderHistory')
+                    ->name('history');
+                Route::get('/{order}', 'show')
+                    ->name('show');
+                Route::patch('/{order}', 'updateStatus')
+                    ->name('updateStatus');
+            }
+        );
     }
 );
