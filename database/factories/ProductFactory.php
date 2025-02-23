@@ -13,7 +13,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => ucfirst(fake()->unique()->word()),
+            'title' => ucfirst(fake()->unique()->words(2, true)),
             'description' => ucfirst(fake()->text),
             'type' => fake()->randomElement(['pizza', 'drink']),
             'price' => fake()->randomFloat(2, 1, 100),
