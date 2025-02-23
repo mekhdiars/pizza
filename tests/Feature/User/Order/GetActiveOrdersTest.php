@@ -48,11 +48,12 @@ class GetActiveOrdersTest extends TestCase
     {
         $products = Product::factory(2)->create();
 
+        $productsCount = 2;
         Order::factory()
             ->for($this->user)
-            ->hasAttached($products, ['quantity' => 2])
+            ->hasAttached($products, ['quantity' => $productsCount])
             ->create([
-                'amount' => ($products[0]->price + $products[1]->price) * 2,
+                'amount' => ($products[0]->price + $products[1]->price) * $productsCount,
             ]);
 
         $response = $this->getJson(route('user.orders.active'));
