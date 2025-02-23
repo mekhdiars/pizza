@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum OrderStatus: string
 {
-    case Preparing = 'preparing';
-    case Delivering = 'delivering';
-    case Received = 'received';
+    case PREPARING = 'preparing';
+    case DELIVERING = 'delivering';
+    case RECEIVED = 'received';
 }

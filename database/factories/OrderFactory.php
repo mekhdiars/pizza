@@ -13,7 +13,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => OrderStatus::Preparing->value,
+            'status' => OrderStatus::PREPARING->value,
             'delivery_time' => now()->toTimeString('minute'),
             'delivery_address' => fake()->streetName() . ', ' . fake()->buildingNumber(),
         ];

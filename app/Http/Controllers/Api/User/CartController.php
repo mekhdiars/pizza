@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Exceptions\CartLimitException;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Cart\AddProductRequest;
 use App\Http\Requests\User\Cart\ReplaceCartRequest;
 use App\Http\Resources\User\Cart\CartResource;
@@ -12,7 +11,7 @@ use App\Services\User\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
-class CartController extends Controller
+class CartController extends UserBasedController
 {
     public function __construct(
         private readonly CartService $cartService
@@ -21,7 +20,7 @@ class CartController extends Controller
 
     public function getCart(): JsonResponse
     {
-        $user = auth('sanctum')->user();
+        $user = $this->getUser();
         $cartProducts = $user->cartProducts;
 
         if ($cartProducts->isEmpty()) {
@@ -31,17 +30,17 @@ class CartController extends Controller
         }
 
         return response()->json(
-            new CartResource($user->cartProducts)
+            new CartResource($cartProducts)
         );
     }
 
     public function addProduct(AddProductRequest $request): JsonResponse
     {
-        $user = auth('sanctum')->user();
+        $user = $this->getUser();
 
-        $canAdd = $this->cartService->canAddProduct($user, $request->product_id, $request->quantity);
+        $hasRoom = $this->cartService->hasRoomForProductAddition($user, $request->product_id, $request->quantity);
 
-        if ($canAdd === false) {
+        if ($hasRoom === false) {
             $productsCountCanAdd = $this->cartService->howManyProductsCanAdd($user);
             $message = "You can add {$productsCountCanAdd['pizza']} pizzas and {$productsCountCanAdd['drink']} drinks";
             throw new CartLimitException($message);
@@ -57,7 +56,7 @@ class CartController extends Controller
     public function replaceUserCart(ReplaceCartRequest $request): JsonResponse
     {
         $cartProducts = $request->cart_products;
-        $user = auth('sanctum')->user();
+        $user = $this->getUser();
 
         try {
             $this->cartService->replaceUserCart($user, $cartProducts);

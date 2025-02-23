@@ -48,7 +48,7 @@ class ReplaceCartTest extends TestCase
                 CartProduct::factory()
                     ->for(Product::factory())
                     ->make([
-                        'quantity' => LimitProductsInCart::Drink->value + 1
+                        'quantity' => LimitProductsInCart::DRINK->value + 1
                     ])
             ]
         ];

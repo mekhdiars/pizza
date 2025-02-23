@@ -14,7 +14,7 @@ return new class extends Migration {
                 ->constrained();
             $table->decimal('amount');
             $table->string('status')
-                ->default(OrderStatus::Preparing->value);
+                ->default(OrderStatus::PREPARING->value);
             $table->time('delivery_time');
             $table->string('delivery_address');
             $table->timestamps();

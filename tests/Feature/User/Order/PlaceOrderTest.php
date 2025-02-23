@@ -57,7 +57,7 @@ class PlaceOrderTest extends TestCase
         $this->assertDatabaseHas(Order::class, [
             'user_id' => $this->user->id,
             'amount' => $this->user->getCartTotal(),
-            'status' => OrderStatus::Preparing->value,
+            'status' => OrderStatus::PREPARING->value,
             'delivery_address' => $data['delivery_address'],
             'delivery_time' => $data['delivery_time'],
         ]);

@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class CartLimitException extends HttpException
 {
     protected $message = "Exceeding limit cart products: "
-        . LimitProductsInCart::Pizza->value . " pizzas and "
-        . LimitProductsInCart::Drink->value . " drinks";
+    . LimitProductsInCart::PIZZA->value . " pizzas and "
+    . LimitProductsInCart::DRINK->value . " drinks";
 
     public function __construct($message = null)
     {

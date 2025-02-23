@@ -28,11 +28,11 @@ class GetActiveOrdersTest extends TestCase
     {
         $this->assertDatabaseMissing(Order::class, [
             'user_id' => $this->user->id,
-            'status' => OrderStatus::Preparing->value
+            'status' => OrderStatus::PREPARING->value
         ]);
         $this->assertDatabaseMissing(Order::class, [
             'user_id' => $this->user->id,
-            'status' => OrderStatus::Delivering->value
+            'status' => OrderStatus::DELIVERING->value
         ]);
 
         $response = $this->getJson(route('user.orders.active'));

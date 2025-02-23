@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Order\StoreOrderRequest;
 use App\Http\Resources\User\Order\OrderCollection;
 use App\Services\User\OrderService;
@@ -10,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderController extends Controller
+class OrderController extends UserBasedController
 {
     public function __construct(
         private readonly OrderService $orderService
@@ -19,7 +18,7 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request): JsonResponse
     {
-        $user = auth('sanctum')->user();
+        $user = $this->getUser();
         $data = $request->validated();
 
         try {
@@ -38,7 +37,7 @@ class OrderController extends Controller
 
     public function getActiveOrders(): JsonResponse
     {
-        $user = auth('sanctum')->user();
+        $user = $this->getUser();
         $activeOrders = $user->orders()->active()->paginate();
 
         if ($activeOrders->isEmpty()) {

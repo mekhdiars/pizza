@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Enums\LimitProductsInCart;
+use App\Enums\ProductType;
 use App\Models\CartProduct;
 use App\Models\Product;
 use App\Models\User;
@@ -43,7 +44,7 @@ class CartService
         });
     }
 
-    public function canAddProduct(User $user, int $productId, int $quantity): bool
+    public function hasRoomForProductAddition(User $user, int $productId, int $quantity): bool
     {
         $type = Product::query()->find($productId)->type;
         $productsCount = $user->cartProducts()
@@ -54,9 +55,9 @@ class CartService
 
         $total = $productsCount + $quantity;
 
-        return $type === 'pizza'
-            ? $total <= LimitProductsInCart::Pizza->value
-            : $total <= LimitProductsInCart::Drink->value;
+        return $type === ProductType::PIZZA->value
+            ? $total <= LimitProductsInCart::PIZZA->value
+            : $total <= LimitProductsInCart::DRINK->value;
     }
 
     /**
@@ -69,8 +70,8 @@ class CartService
             ->getCountProductsByType($products->toArray());
 
         return [
-            'pizza' => LimitProductsInCart::Pizza->value - $productsCount['pizza'],
-            'drink' => LimitProductsInCart::Drink->value - $productsCount['drink']
+            'pizza' => LimitProductsInCart::PIZZA->value - $productsCount['pizza'],
+            'drink' => LimitProductsInCart::DRINK->value - $productsCount['drink']
         ];
     }
 }

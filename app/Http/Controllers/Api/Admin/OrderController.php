@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\UpdateStatusRequest;
 use App\Http\Resources\Admin\Order\OrderCollection;
 use App\Http\Resources\Admin\Order\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 
-class OrderController extends Controller
+class OrderController extends AdminBasedController
 {
     public function getActiveOrders(): JsonResponse
     {

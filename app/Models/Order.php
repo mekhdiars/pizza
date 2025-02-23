@@ -33,15 +33,15 @@ class Order extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            OrderStatus::Preparing->value,
-            OrderStatus::Delivering->value
+            OrderStatus::PREPARING->value,
+            OrderStatus::DELIVERING->value
         ]);
     }
 
     public function scopeHistory(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            OrderStatus::Received->value,
+            OrderStatus::RECEIVED->value,
         ]);
     }
 

@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum ProductType: string
 {
-    case Pizza = 'pizza';
-    case Drink = 'drink';
+    case PIZZA = 'pizza';
+    case DRINK = 'drink';
 }

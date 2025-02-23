@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Enums\ProductType;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\User\Product\MenuProductsResource;
 use App\Http\Resources\User\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
-class ProductController extends Controller
+class ProductController extends UserBasedController
 {
     public function index(): JsonResponse
     {
         $pizzas = Product::query()
-            ->where('type', 'pizza')
+            ->where('type', ProductType::PIZZA->value)
             ->get();
 
         $drinks = Product::query()
-            ->where('type', 'drink')
+            ->where('type', ProductType::DRINK->value)
             ->get();
 
         return response()->json([

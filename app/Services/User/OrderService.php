@@ -13,7 +13,7 @@ class OrderService
             $cartProducts = $user->cartProducts;
             $order = $user->orders()->create([
                 'amount' => $user->getCartTotal(),
-                'status' => OrderStatus::Preparing->value,
+                'status' => OrderStatus::PREPARING->value,
                 'delivery_address' => $data['delivery_address'],
                 'delivery_time' => $data['delivery_time'],
             ]);

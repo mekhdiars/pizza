@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Auth\LoginRequest;
 use App\Http\Requests\Admin\Auth\RegisterRequest;
 use App\Models\Admin;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthController extends Controller
+class AuthController extends AdminBasedController
 {
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -44,7 +43,7 @@ class AuthController extends Controller
 
     public function logout(): JsonResponse
     {
-        auth('sanctum')->user()->currentAccessToken()->delete();
+        $this->getAdmin()->tokens()->delete();
 
         return response()->json([
             'message' => 'Successfully logged out',
